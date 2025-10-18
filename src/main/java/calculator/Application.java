@@ -10,6 +10,16 @@ public class Application {
         String userInput = Console.readLine();
 
         String delimiter = ":,";
+
+        boolean customDelimiterExist = userInput.regionMatches(0, "//", 0, 2)
+                && userInput.regionMatches(3, "\\n", 0, 2);
+
+        if (customDelimiterExist) {
+            delimiter += userInput.charAt(2);
+            System.out.println(delimiter);
+            userInput = userInput.substring(5);
+        }
+
         int result = getSum(delimiter, userInput);
         System.out.println(String.format("결과 : %d",result));
         Console.close();
