@@ -16,7 +16,6 @@ public class Application {
 
         if (customDelimiterExist) {
             delimiter += userInput.charAt(2);
-            System.out.println(delimiter);
             userInput = userInput.substring(5);
         }
 
@@ -27,11 +26,22 @@ public class Application {
 
     private static int getSum(String delimiter, String inputBuff) {
         int result = 0;
+
+        if (inputBuff.regionMatches(0, "//", 0, 2) && inputBuff.contains("\\n"))
+            throw new IllegalArgumentException("커스텀 구분자 문법 미준수");
+
         StringTokenizer tokens = new StringTokenizer(inputBuff, delimiter);
         while(tokens.hasMoreTokens()) {
-            result += Integer.parseInt(tokens.nextToken());
+            int toAdd;
+            try {
+                toAdd = Integer.parseInt(tokens.nextToken());
+            } catch (Exception e) {
+                throw new IllegalArgumentException("기존 구분자 및 커스텀 구분자 외 다른 문자 사용");
+            }
+            if (toAdd <= 0)
+                throw new IllegalArgumentException("양수가 아닌 숫자 입력");
+            result += toAdd;
         }
-
         return result;
     }
 }
